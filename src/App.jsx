@@ -1,49 +1,48 @@
 import React, { useState } from "react";
 
-// Konfigurasi
+// Different text messages for the "No" button
 const NO_TEXTS = [
   "Are you sure?",
   "Really sure?",
   "Think again!",
-  "Last chance!",
   "Don't do it!",
-  "I'm gonna cry...",
-  "You break my heart 💔",
+  "Last chance!",
 ];
 
-const MAX_GROWTH = 40;
+const MAX_GROWTH = 40; // maximum button growth percentage
 
 export default function App() {
-  const [phase, setPhase] = useState("game"); // 'game' atau 'letter'
+  const [phase, setPhase] = useState("game"); // either 'game' or 'letter'
   const [noCount, setNoCount] = useState(0);
   const [yesWidth, setYesWidth] = useState(50);
   const [isOpening, setIsOpening] = useState(false);
 
-  // Logic Tombol No
+  // Handle when user clicks No button
   const handleNoClick = () => {
     const nextCount = noCount + 1;
     setNoCount(nextCount);
 
+    // make Yes button bigger each time No is clicked
     if (nextCount <= NO_TEXTS.length) {
       const growthPerStep = MAX_GROWTH / NO_TEXTS.length;
       setYesWidth(50 + growthPerStep * nextCount);
     } else {
-      setYesWidth(100);
+      setYesWidth(100); // max out at 100%
     }
   };
 
-  // Logic Tombol Yes
+  // Handle when user finally clicks Yes
   const handleYesClick = () => {
     setPhase("letter");
     createConfetti();
-    // Delay dikit sebelum amplop mbuka
+    // wait a bit before opening the envelope animation
     setTimeout(() => setIsOpening(true), 500);
   };
 
-  // Helper buat nentuin teks tombol No
+  // Figure out what text to show on No button
   const getNoText = () => {
-    // Kalau belum pernah diklik (0), tampilkan "No"
-    // Kalau sudah diklik, baru ambil dari list (index dikurang 1)
+    // If never clicked yet (0), just show "No"
+    // Otherwise grab from the array (subtract 1 for index)
     return noCount === 0
       ? "No"
       : NO_TEXTS[Math.min(noCount - 1, NO_TEXTS.length - 1)];
@@ -51,7 +50,7 @@ export default function App() {
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center px-4 overflow-hidden relative">
-      {/* --- PHASE 1: GAME --- */}
+      {/* PHASE 1: The Game Part */}
       {phase === "game" && (
         <div className="flex flex-col items-center w-full max-w-md transition-all duration-500">
           <img
@@ -65,7 +64,7 @@ export default function App() {
           </h1>
 
           <div className="flex w-full h-16 gap-2 relative">
-            {/* Tombol YES */}
+            {/* Yes Button */}
             <button
               onClick={handleYesClick}
               className="bg-red-500 hover:bg-red-600 text-white font-bold text-lg rounded-xl flex items-center justify-center shadow-lg overflow-hidden whitespace-nowrap z-10 transition-all duration-300 ease-out"
@@ -74,7 +73,7 @@ export default function App() {
               Yes
             </button>
 
-            {/* Tombol NO */}
+            {/* No Button (disappears when Yes reaches 100%) */}
             {yesWidth < 100 && (
               <button
                 onClick={handleNoClick}
@@ -92,7 +91,7 @@ export default function App() {
         </div>
       )}
 
-      {/* --- PHASE 2: SURAT CINTA --- */}
+      {/* PHASE 2: Love Letter */}
       {phase === "letter" && (
         <div className="envelope-wrapper flex flex-col items-center transition-opacity duration-1000 mt-12">
           <div className={`envelope ${isOpening ? "open" : ""}`}>
@@ -119,7 +118,7 @@ export default function App() {
   );
 }
 
-// Fungsi Confetti
+// Confetti animation function
 function createConfetti() {
   const colors = ["❤️", "🌹", "💌", "✨", "🎀"];
   const interval = setInterval(() => {
