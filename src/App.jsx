@@ -1,0 +1,142 @@
+import React, { useState } from "react";
+
+// Konfigurasi
+const NO_TEXTS = [
+  "Are you sure?",
+  "Really sure?",
+  "Think again!",
+  "Last chance!",
+  "Don't do it!",
+  "I'm gonna cry...",
+  "You break my heart 💔",
+];
+
+const MAX_GROWTH = 40;
+
+export default function App() {
+  const [phase, setPhase] = useState("game"); // 'game' atau 'letter'
+  const [noCount, setNoCount] = useState(0);
+  const [yesWidth, setYesWidth] = useState(50);
+  const [isOpening, setIsOpening] = useState(false);
+
+  // Logic Tombol No
+  const handleNoClick = () => {
+    const nextCount = noCount + 1;
+    setNoCount(nextCount);
+
+    if (nextCount <= NO_TEXTS.length) {
+      const growthPerStep = MAX_GROWTH / NO_TEXTS.length;
+      setYesWidth(50 + growthPerStep * nextCount);
+    } else {
+      setYesWidth(100);
+    }
+  };
+
+  // Logic Tombol Yes
+  const handleYesClick = () => {
+    setPhase("letter");
+    createConfetti();
+    // Delay dikit sebelum amplop mbuka
+    setTimeout(() => setIsOpening(true), 500);
+  };
+
+  // Helper buat nentuin teks tombol No
+  const getNoText = () => {
+    // Kalau belum pernah diklik (0), tampilkan "No"
+    // Kalau sudah diklik, baru ambil dari list (index dikurang 1)
+    return noCount === 0
+      ? "No"
+      : NO_TEXTS[Math.min(noCount - 1, NO_TEXTS.length - 1)];
+  };
+
+  return (
+    <div className="h-screen w-screen flex flex-col justify-center items-center px-4 overflow-hidden relative">
+      {/* --- PHASE 1: GAME --- */}
+      {phase === "game" && (
+        <div className="flex flex-col items-center w-full max-w-md transition-all duration-500">
+          <img
+            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpwaXF4ZzRndmN5bmZ5bmZ5bmZ5bmZ5bmZ5bmZ5bmZ5bmZ5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpN9Sg/giphy.gif"
+            alt="Cute Cat"
+            className="w-48 h-48 rounded-2xl shadow-xl mb-6 object-cover"
+          />
+
+          <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">
+            Will you be my Valentine?
+          </h1>
+
+          <div className="flex w-full h-16 gap-2 relative">
+            {/* Tombol YES */}
+            <button
+              onClick={handleYesClick}
+              className="bg-red-500 hover:bg-red-600 text-white font-bold text-lg rounded-xl flex items-center justify-center shadow-lg overflow-hidden whitespace-nowrap z-10 transition-all duration-300 ease-out"
+              style={{ width: `${yesWidth}%` }}
+            >
+              Yes
+            </button>
+
+            {/* Tombol NO */}
+            {yesWidth < 100 && (
+              <button
+                onClick={handleNoClick}
+                className={`
+                  bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold rounded-xl flex items-center justify-center shadow-lg px-1 text-center 
+                  whitespace-normal leading-none wrap-break-word overflow-hidden transition-all duration-300 ease-out z-20
+                  ${noCount >= NO_TEXTS.length - 1 ? "text-[0.6rem]" : "text-xs"}
+                `}
+                style={{ width: `${100 - yesWidth}%` }}
+              >
+                {getNoText()}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* --- PHASE 2: SURAT CINTA --- */}
+      {phase === "letter" && (
+        <div className="envelope-wrapper flex flex-col items-center transition-opacity duration-1000 mt-12">
+          <div className={`envelope ${isOpening ? "open" : ""}`}>
+            <div className="letter text-center rounded-lg border border-gray-200">
+              <h2 className="text-xl font-bold text-red-500 mb-2 mt-4 handwriting">
+                Dear Sayangg,
+              </h2>
+              <p className="text-gray-700 text-sm handwriting text-lg">
+                Makasih udah mau jadi Valentine aku. <br />
+                <br />
+                Aku tau tombol "No"-nya nyebelin, tapi percayalah aku lebih
+                nyebelin 😜.
+                <br />
+                <br />I Love You! ❤️
+              </p>
+              <div className="mt-auto mb-4 text-xs text-gray-400 font-sans">
+                Screenshot ini & kirim ke aku
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Fungsi Confetti
+function createConfetti() {
+  const colors = ["❤️", "🌹", "💌", "✨", "🎀"];
+  const interval = setInterval(() => {
+    const el = document.createElement("div");
+    el.innerText = colors[Math.floor(Math.random() * colors.length)];
+    el.style.position = "fixed";
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.top = "-50px";
+    el.style.fontSize = "2rem";
+    el.style.transition = "top 4s linear, opacity 3s ease";
+    el.style.zIndex = "9999";
+    document.body.appendChild(el);
+    setTimeout(() => {
+      el.style.top = "110vh";
+      el.style.opacity = "0";
+    }, 100);
+    setTimeout(() => el.remove(), 4000);
+  }, 200);
+  setTimeout(() => clearInterval(interval), 5000);
+}
