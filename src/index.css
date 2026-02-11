@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Segoe+UI&display=swap");
 
+/* Basic body setup - chose pink background cause why not lol */
 body {
   background-color: #ffe4e6;
   font-family: "Segoe UI", sans-serif;
@@ -8,24 +9,26 @@ body {
   touch-action: manipulation;
 }
 
-/* --- LOGIKA AMPLOP --- */
+/* ========================================
+   ENVELOPE LOGIC STARTS HERE
+   ======================================== */
 
 .envelope-wrapper {
-  perspective: 1000px;
+  perspective: 1000px; /* gives it that 3D effect */
 }
 
 .envelope {
   position: relative;
   width: 300px;
   height: 200px;
-  background-color: #ef4444;
+  background-color: #ef4444; /* red color for the envelope */
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   z-index: 10;
 }
 
-/* --- BAGIAN BAWAH (SEGITIGA BAWAH) --- */
+/* Bottom triangle part of envelope */
 .envelope::before {
   content: "";
   position: absolute;
@@ -33,21 +36,21 @@ body {
   height: 0;
   border-left: 150px solid transparent;
   border-right: 150px solid transparent;
-  border-bottom: 100px solid #dc2626; /* Merah agak gelap */
+  border-bottom: 100px solid #dc2626; /* darker red shade */
   bottom: 0;
   left: 0;
-  z-index: 30; /* Layer paling depan saat tertutup */
+  z-index: 30; /* front layer when closed */
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 
-  /* --- UPDATE: AGAR BISA MUTER KE BAWAH --- */
-  transform-origin: bottom; /* Poros putar di bawah */
+  /* Making it rotate downward when opening */
+  transform-origin: bottom; /* rotation pivot at bottom */
   transition:
     transform 0.6s 0.2s ease-in-out,
     z-index 0.2s 0.4s;
 }
 
-/* --- TUTUP ATAS (SEGITIGA ATAS) --- */
+/* Top flap (triangle shape) */
 .envelope::after {
   content: "";
   position: absolute;
@@ -55,23 +58,23 @@ body {
   height: 0;
   border-left: 150px solid transparent;
   border-right: 150px solid transparent;
-  border-top: 100px solid #f87171; /* Warna tutup */
+  border-top: 100px solid #f87171; /* flap color */
   top: 0;
   left: 0;
-  z-index: 40; /* Paling atas */
+  z-index: 40; /* topmost layer */
 
-  /* --- UPDATE: ANIMASI PUTAR --- */
-  transform-origin: top; /* Poros putar di atas */
+  /* Rotation animation setup */
+  transform-origin: top; /* pivot at top */
   transition:
     transform 0.6s 0.2s ease-in-out,
     z-index 0.2s 0.4s;
 }
 
-/* --- KERTAS SURAT --- */
+/* THE LETTER PAPER INSIDE */
 .letter {
   position: absolute;
 
-  /* UKURAN AWAL */
+  /* Initial dimensions */
   width: 260px;
   height: 180px;
 
@@ -83,11 +86,10 @@ body {
   padding: 20px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 
-  /* LAYER */
-  /* Di tengah: Belakang tutup (30/40), Depan badan (10) */
+  /* Layering: Between flaps (30/40) and body (10) */
   z-index: 20;
 
-  /* TRANSISI */
+  /* Smooth transition effect */
   transition: height 1s 0.6s ease-out;
 
   display: flex;
@@ -96,26 +98,29 @@ body {
   overflow: hidden;
 }
 
-/* --- ANIMASI SAAT TERBUKA --- */
+/* ========================================
+   ANIMATION WHEN ENVELOPE OPENS
+   ======================================== */
 
-/* 1. Tutup ATAS putar ke atas */
+/* Step 1: Top flap rotates upward */
 .envelope.open::after {
   transform: rotateX(180deg);
-  z-index: 0; /* Pindah ke belakang */
+  z-index: 0; /* moves to back */
 }
 
-/* 2. Tutup BAWAH putar ke bawah (BARU) */
+/* Step 2: Bottom flap rotates downward */
 .envelope.open::before {
-  transform: rotateX(180deg); /* Putar ke bawah */
-  z-index: 0; /* Pindah ke belakang */
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2); /* Efek bayangan dikit */
+  transform: rotateX(180deg); /* rotate down */
+  z-index: 0; /* send to back layer */
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2); /* adds subtle shadow effect */
 }
 
-/* 3. Kertas memanjang */
+/* Step 3: Letter extends/grows */
 .envelope.open .letter {
   height: 320px;
 }
 
+/* Fancy handwriting font styling */
 .handwriting {
   font-family: "Dancing Script", cursive;
   line-height: 1.4;
