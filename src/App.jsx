@@ -127,8 +127,8 @@ export default function App() {
                   Tapi kamu perlu tau meskipun raga kita kepisah jarak, tapi percayalah frekuensi hati aku selalu nyambung ke kamu<br/><br/>
                   
                   Makasih udah hebat menjaga hati disana. Aku tahu ini gak mudah <br />
-                  Aku janji bakal terus berusaha jadi yang terbaik buat kamu <br />
-                  Tapi aku ga janji bakal berhenti buat nyebelin ke kamu yaa hehe... 😜 <br /><br />
+                  Aku janji bakal terus berusaha jadi yang terbaik buat kamu. <br /><br />
+                  Tapi aku ga janji bakal berhenti buat nyebelin ke kamu yaa 😜 <br /><br />
                   
                   Sehat-sehat ya Sayangg di sana! <br /> I Love You! ❤️
                 </p>
