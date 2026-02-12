@@ -9,7 +9,7 @@ const NO_TEXTS = [
   "Masih gak mau?",
   "Please deh...",
   "Sedihhh :(",
-  "Pleaseeee? 🥺",
+  "Please? 🥺",
 ];
 
 const MAX_GROWTH = 40; 
@@ -115,7 +115,7 @@ export default function App() {
               </h2>
 
               {/* Isi Surat Scrollable */}
-              <div className="flex-1 w-full overflow-y-auto text-gray-700 text-xs handwriting leading-relaxed px-2 text-center">
+              <div className="flex-1 w-full overflow-y-auto text-gray-700 text-xs font-serif leading-relaxed px-2 text-center">
                 <p>
                   Makasih udah mau jadi Valentine aku. <br /><br />
                   
