@@ -1,48 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import musicFile from "./assets/lagu-kita.mp3"; // Pastikan nama file lagu sesuai
 
-// Different text messages for the "No" button
+// Teks tombol No (Versi Bahasa Indonesia)
 const NO_TEXTS = [
-  "Are you sure?",
-  "Really sure?",
-  "Think again!",
-  "Don't do it!",
-  "Last chance!",
+  "Yakinnn?",
+  "Ah yang bener?",
+  "Gak mau ya?",
+  "Masih gak mau?",
+  "Please deh...",
+  "Sedihhh :(",
+  "Terakhir ya, pleaseeee?",
 ];
 
-const MAX_GROWTH = 40; // maximum button growth percentage
+const MAX_GROWTH = 40; 
 
 export default function App() {
-  const [phase, setPhase] = useState("game"); // either 'game' or 'letter'
+  const [phase, setPhase] = useState("game"); 
   const [noCount, setNoCount] = useState(0);
   const [yesWidth, setYesWidth] = useState(50);
   const [isOpening, setIsOpening] = useState(false);
 
-  // Handle when user clicks No button
+  // Inisialisasi Audio
+  const audioRef = useRef(new Audio(musicFile));
+
+  // Handle klik tombol No
   const handleNoClick = () => {
     const nextCount = noCount + 1;
     setNoCount(nextCount);
 
-    // make Yes button bigger each time No is clicked
     if (nextCount <= NO_TEXTS.length) {
       const growthPerStep = MAX_GROWTH / NO_TEXTS.length;
       setYesWidth(50 + growthPerStep * nextCount);
     } else {
-      setYesWidth(100); // max out at 100%
+      setYesWidth(100); 
     }
   };
 
-  // Handle when user finally clicks Yes
+  // Handle klik tombol Yes
   const handleYesClick = () => {
     setPhase("letter");
     createConfetti();
-    // wait a bit before opening the envelope animation
+
+    // Play Music
+    if (audioRef.current) {
+      audioRef.current.volume = 0.6; 
+      audioRef.current.loop = true;  
+      audioRef.current.play().catch((e) => console.log("Gagal play audio:", e));
+    }
+
     setTimeout(() => setIsOpening(true), 500);
   };
 
-  // Figure out what text to show on No button
   const getNoText = () => {
-    // If never clicked yet (0), just show "No"
-    // Otherwise grab from the array (subtract 1 for index)
     return noCount === 0
       ? "No"
       : NO_TEXTS[Math.min(noCount - 1, NO_TEXTS.length - 1)];
@@ -50,14 +59,16 @@ export default function App() {
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center px-4 overflow-hidden relative">
-      {/* PHASE 1: The Game Part */}
+      
+      {/* PHASE 1: GAME */}
       {phase === "game" && (
-        <div className="flex flex-col items-center w-full max-w-md transition-all duration-500">
-          <img
-            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpwaXF4ZzRndmN5bmZ5bmZ5bmZ5bmZ5bmZ5bmZ5bmZ5bmZ5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpN9Sg/giphy.gif"
+        <div className="mix-blend-multiply flex flex-col items-center w-full max-w-md transition-all duration-500">
+          <div class="tenor-gif-embed" data-postid="3437054553925604281" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/gojill-the-meow-please-pleading-plead-gif-3437054553925604281">Gojill The Meow Please Sticker</a>from <a href="https://tenor.com/search/gojill+the+meow-stickers">Gojill The Meow Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+          {/* <img
+            src="https://tenor.com/view/gojill-the-meow-please-pleading-plead-gif-3437054553925604281"
             alt="Cute Cat"
             className="w-48 h-48 rounded-2xl shadow-xl mb-6 object-cover"
-          />
+          /> */}
 
           <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">
             Will you be my Valentine?
@@ -73,7 +84,7 @@ export default function App() {
               Yes
             </button>
 
-            {/* No Button (disappears when Yes reaches 100%) */}
+            {/* No Button */}
             {yesWidth < 100 && (
               <button
                 onClick={handleNoClick}
@@ -91,34 +102,62 @@ export default function App() {
         </div>
       )}
 
-      {/* PHASE 2: Love Letter */}
+      {/* PHASE 2: LOVE LETTER */}
       {phase === "letter" && (
         <div className="envelope-wrapper flex flex-col items-center transition-opacity duration-1000 mt-12">
           <div className={`envelope ${isOpening ? "open" : ""}`}>
-            <div className="letter text-center rounded-lg border border-gray-200">
-              <h2 className="text-xl font-bold text-red-500 mb-2 mt-4 handwriting">
-                Dear Sayangg,
+            
+            {/* Kertas Surat: Flex Column + Scrollable */}
+            <div className="letter text-center rounded-lg border border-gray-200 flex flex-col items-center p-4">
+              
+              <h2 className="text-lg font-bold text-red-500 mb-2 mt-1 handwriting shrink-0">
+                Dear Dila Sayangg,
               </h2>
-              <p className="text-gray-700 text-sm handwriting text-lg">
-                Makasih udah mau jadi Valentine aku. <br />
-                <br />
-                Aku tau tombol "No"-nya nyebelin, tapi percayalah aku lebih
-                nyebelin 😜.
-                <br />
-                <br />I Love You! ❤️
-              </p>
-              <div className="mt-auto mb-4 text-xs text-gray-400 font-sans">
+
+              {/* Isi Surat Scrollable */}
+              <div className="flex-1 w-full overflow-y-auto text-gray-700 text-xs handwriting leading-relaxed px-2 text-center">
+                <p>
+                  Makasih udah mau jadi Valentine aku. <br /><br />
+                  
+                  Tombol "No"-nya nyebelin ya? wkwkwk <br />
+                  Itu tandanya kamu emang gak punya pilihan lain selain jadi Valentine aku 😋<br/><br/>
+                  
+                  Selama aku ngoding, benerin <i>error</i> kodingan itu memang susah, tapi lebih susah nahan kangen sama kamu yang jauh disana<br/><br/>
+                  
+                  Tapi kamu perlu tau meskipun raga kita kepisah jarak, tapi percayalah frekuensi hati aku selalu nyambung ke kamu<br/><br/>
+                  
+                  Makasih udah hebat menjaga hati disana. Aku tahu ini gak mudah <br />
+                  Aku janji bakal terus berusaha jadi yang terbaik buat kamu <br />
+                  Tapi aku ga janji bakal berhenti buat nyebelin ke kamu yaa hehe... 😜 <br /><br />
+                  
+                  Sehat-sehat ya Sayangg di sana! <br /> I Love You! ❤️
+                </p>
+              </div>
+
+              <div className="mt-2 text-[10px] text-gray-400 font-sans shrink-0">
                 Screenshot ini & kirim ke aku
               </div>
+
             </div>
           </div>
+          
+          {/* Tombol Mute */}
+          <button 
+            onClick={() => {
+              if (audioRef.current.paused) audioRef.current.play();
+              else audioRef.current.pause();
+            }}
+            className="mt-12 text-white text-xs underline z-50 opacity-50 hover:opacity-100"
+          >
+            Mute/Play Music
+          </button>
         </div>
       )}
     </div>
   );
 }
 
-// Confetti animation function
+// Confetti Function
 function createConfetti() {
   const colors = ["❤️", "🌹", "💌", "✨", "🎀"];
   const interval = setInterval(() => {
