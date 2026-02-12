@@ -9,7 +9,7 @@ const NO_TEXTS = [
   "Masih gak mau?",
   "Please deh...",
   "Sedihhh :(",
-  "Terakhir ya, pleaseeee?",
+  "Pleaseeee? 🥺",
 ];
 
 const MAX_GROWTH = 40; 
