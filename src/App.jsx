@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import musicFile from "./assets/lagu-kita.mp3"; // Pastikan nama file lagu sesuai
+import musicFile from "./assets/lagu-kita.MP3"; // Pastikan nama file lagu sesuai
 
 // Teks tombol No (Versi Bahasa Indonesia)
 const NO_TEXTS = [
